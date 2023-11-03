@@ -1,0 +1,17 @@
+<!-- inherit from base.html -->
+{% extends 'project_app/base_template.html' %}
+
+<!-- Replace block content in base_template.html -->
+{% block content %}
+  <h1>WSI Scan Sheets</h1>
+
+  <h2>List of Stores</h2>
+  {% for i in stores %}
+  <li class="list-group-item">
+    <img src="{{ i.store_img.url }}" class="img-responsive" style="width: 20%"/>
+  <p><strong>Name: {{ i.name }}</strong></p>
+  <a class="btn btn-primary" href="{{ i.store.get_absolute_url }}" role="button">View Scan Sheets</a>
+  </li>
+  {% endfor %}
+  </ul>
+{% endblock %}
