@@ -22,7 +22,8 @@ class AddItemsToSheetForm(ModelForm):
         fields = ['items']
 
     # https://docs.djangoproject.com/en/4.2/ref/forms/fields/#django.forms.ModelMultipleChoiceField
-    # The ModelMultipleChoiceField adds checkboxes next to each Item object so you can select what to add to the scan sheet
+    # The ModelMultipleChoiceField lets you select multiple objects to add to a (many to many) field
+    # The CheckboxSelectMultiple adds checkboxes next to each Item object so you can select what to add to the scan sheet
     items = ModelMultipleChoiceField(
         queryset=Item.objects.all(),
         widget=CheckboxSelectMultiple,
