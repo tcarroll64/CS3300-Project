@@ -1,0 +1,32 @@
+{% extends 'project_app/base_template.html' %}
+
+{% block content %}
+
+<h3>All Items</h3>
+<a href="{% url 'create_item' %}" class="btn btn-success" style="margin-bottom: 5px">Create New Item</a>
+{% if items %}
+<div class="row">
+    {% for item in items %}
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <h5 class="card-title; mx-auto">{{ item.name }}</h5>
+                <!-- Hardcoded image size since all barcodes will be same size (not responsive) -->
+                <img src="{{ item.barcode.url }}" class="mx-auto" alt="{{ item.name }}" width="111px" height="46px" >
+                <div class="card-body">
+                    <p class="card-text">Code: {{ item.code }}</p>
+                    <p class="card-text">{{ item.quant_bag }}/Bag</p>
+                    <p class="card-text">{{ item.quant_box }}/Box</p>
+                    <p class="card-text">Notes: {{ item.about }}</p>
+                    <a href="{% url 'update_item' item.id %}" class="btn btn-primary d-flex justify-content-center" role="button">Update Item</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% else %}
+<p><strong>There are no items in the database!</strong></p>
+{% endif %}
+
+{% comment %} <a href="{% url 'store-detail' store.id %}" class="btn btn-primary" role="button">Go Back</a>
+<a href="{% url 'add_items_to_sheet' sheet_id=sheet.id store_id=store.id %}" class="btn btn-primary" role="button">Add/Remove Items</a> {% endcomment %}
+{% endblock %}

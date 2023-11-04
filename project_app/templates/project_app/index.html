@@ -3,14 +3,19 @@
 
 <!-- Replace block content in base_template.html -->
 {% block content %}
-  <h1>WSI Scan Sheets</h1>
+  <hr>
+  <p><strong>ADD SOME ABOUT INFO HERE</strong></p>
+  <hr>
 
   <h2>List of Stores</h2>
-  {% for i in stores %}
+  <a class="btn btn-primary my-2" href="{% url 'create_store' %}" role="button">Create Store</a>
+  
+  {% for store in stores %}
   <li class="list-group-item">
-    <img src="{{ i.store_img.url }}" class="img-responsive" style="width: 20%"/>
-  <p><strong>Name: {{ i.name }}</strong></p>
-  <a class="btn btn-primary" href="{{ i.store.get_absolute_url }}" role="button">View Scan Sheets</a>
+    <img src="{{ store.store_img.url }}" class="img-responsive" style="width: 20%"/>
+  <p><strong>Name: {{ store.name }}</strong></p>
+  <a class="btn btn-primary" href="{{ store.get_absolute_url }}" role="button">View Scan Sheets</a>
+  <a class="btn btn-danger" href="{% url 'delete_store' store_id=store.id%}" role="button">Delete Store</a>
   </li>
   {% endfor %}
   </ul>

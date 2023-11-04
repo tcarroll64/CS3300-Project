@@ -1,0 +1,19 @@
+<!-- inherit from base.html -->
+{% extends 'project_app/base_template.html' %}
+
+{% block content %}
+
+<!-- https://www.geeksforgeeks.org/imagefield-django-forms/ -->
+<!-- enctype specifies how form is encoded before sent to server; necessary for image fields! -->
+<form action="" method="POST" enctype="multipart/form-data">
+
+{% csrf_token %}
+<table>
+{{ form.as_table }}
+</table>
+
+<a href="{% url 'item-list' %}" class="btn btn-primary">Cancel</a>
+<input type="submit" class="btn btn-primary" name="Submit">
+</form>
+
+{% endblock %}
