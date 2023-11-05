@@ -3,15 +3,16 @@
 
 <!-- Replace block content in base_template.html -->
 {% block content %}
+
 <div class="container-fluid">
-<form action="" method="POST">
- <h3>Updating {{ sheet.name }}:</h3>
+<form action="" method="POST" enctype="multipart/form-data">
+ <h3>Updating {{ store.name }}:</h3>
 
 {% csrf_token %}
 <table>
     {{ form.as_table }}
     </table>
-    <a href="{% url 'store-detail' pk=sheet.store.id %}" class="btn btn-primary my-2">Cancel</a>
+    <a href="{% url 'index' %}" class="btn btn-primary">Cancel</a>
     <input type="submit" class="btn btn-primary" name="Submit">
 </form>
 </div>

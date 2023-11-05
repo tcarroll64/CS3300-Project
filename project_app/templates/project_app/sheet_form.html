@@ -4,15 +4,15 @@
 <!-- Replace block content in base_template.html -->
 {% block content %}
 
+<div class="container-fluid">
 <form action="" method="POST">
 
 {% csrf_token %}
 <table>
 {{ form.as_table }}
 </table>
-<a href="{% url 'store-detail' pk=store.id %}" class="btn btn-primary">Cancel</a>
+<a href="{% url 'store-detail' pk=store.id %}" class="btn btn-primary my-2">Cancel</a>
 <input type="submit" class="btn btn-primary" name="Submit">
-
 </form>
-
+</div>
 {% endblock %}

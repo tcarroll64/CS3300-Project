@@ -4,18 +4,19 @@
 <!-- Replace block content in base_template.html -->
 {% block content %}
 
-<form action="" method="POST">
- <h3>Adding items to {{ sheet.name }}...</h3>
+<div class="container-fluid">
+    <form action="" method="POST">
+        <h3>Adding items to {{ sheet.name }}...</h3>
 
 {% csrf_token %}
-<table>
+    <table>
     <!-- https://docs.djangoproject.com/en/4.2/topics/forms/ -->
-    {{ form.as_p }}
+        {{ form.as_p }}
     </table>
     <a href="{% url 'create_item' %}" class="btn btn-success" style="margin-bottom: 5px">Create New Item</a>
     <br>
     <a href="{% url 'sheet-detail' sheet_id=sheet.id store_id=sheet.store.id %}" class="btn btn-primary">Cancel</a>
     <input type="submit" class="btn btn-primary" name="Add items">
-</form>
-
+    </form>
+</div>
 {% endblock %}

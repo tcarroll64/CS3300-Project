@@ -5,22 +5,23 @@
 <style>
   /* Defining a mouseover effect so the user can see the card they are interacting with easier*/
   .hover-card:hover {
-    background-color: #f5f5f5;
+    background-color: #1E1076;
   }
 </style>
-
+<div class="container-fluid text-center">
   <h1>{{ store.name }}</h1>
 
-  <img src="{{ store.store_img.url }}" class="img-responsive" style="width: 30%; padding:10px; margin-bottom: 20px"/>
+  <img src="{{ store.store_img.url }}" class="img-responsive; mx-auto" alt="{{ store.name }} logo"style="width: 30%; padding:10px; margin-bottom: 20px"/>
   <p><strong>About:</strong> {{ store.about }}</p>
-
+</div>
+<div class="container-fluid">
   <h3>Sheets:</h3>
   <a class="btn btn-primary" href="{% url 'create_sheet' store.id %}" role="button" style="margin-bottom: 10px">Create New Sheet</a>
-  
+
   {% if sheets %}
     {% for sheet in sheets %}
-    <div class="card hover-card">
-        <div class="card-body">
+    <div class="card hover-card" >
+        <div class="card-body" style="background-color:#CAFAFE">
             <h5 class="card-title">{{ sheet.name }} - {{ sheet.pub_date }}</h5>
             <a href="{% url 'sheet-detail' sheet_id=sheet.id store_id=store.id %}" class="btn btn-primary">View</a>
             <a href="{% url 'update-sheet' store_id=store.id sheet_id=sheet.id %}" class="btn btn-primary">Update Sheet Info</a>
@@ -31,4 +32,6 @@
   {% else %}
   <p>There are no sheets for {{store.name}} </p>
   {% endif %}
+  <br>
+</div>
 {% endblock %}

@@ -4,6 +4,7 @@
 <!-- Replace block content in base_template.html -->
 {% block content %}
 
+<div class="container-fluid">
 <form action="" method="POST">
  <p><strong>Are you sure you want to delete "{{ sheet.name }}"?</strong></p>
 
@@ -11,5 +12,5 @@
 <a href="{% url 'store-detail' pk=sheet.store.id %}" class="btn btn-primary">Cancel</a>
 <input type="submit" class="btn btn-danger" name="Submit">
 </form>
-
+</div>
 {% endblock %}

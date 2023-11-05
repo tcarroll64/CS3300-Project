@@ -2,6 +2,7 @@
 
 {% block content %}
 
+<div class="container-fluid">
 <h1>{{ sheet.name }}</h1>
 <p>Author: {{ sheet.author }}</p>
 <p>Created on: {{ sheet.pub_date }}</p>
@@ -13,10 +14,10 @@
 <div class="row">
     {% for item in items %}
         <div class="col-md-4">
-            <div class="card mb-4">
+            <div class="card mb-4" style="background-color:#CAFAFE">
                 <h5 class="card-title; mx-auto">{{ item.name }}</h5>
                 <!-- Hardcoded image size since all barcodes will be same size (not responsive) -->
-                <img src="{{ item.barcode.url }}" class="mx-auto" alt="{{ item.name }}" width="111px" height="46px" >
+                <img src="{{ item.barcode.url }}" class="mx-auto" alt="{{ item.name }} barcode" width="111px" height="46px" >
                 <div class="card-body">
                     <p class="card-text">Code: {{ item.code }}</p>
                     <p class="card-text">{{ item.quant_bag }}/Bag</p>
@@ -33,4 +34,5 @@
 
 <a href="{% url 'store-detail' store.id %}" class="btn btn-primary" role="button">Go Back</a>
 <a href="{% url 'add_items_to_sheet' sheet_id=sheet.id store_id=store.id %}" class="btn btn-primary" role="button">Add/Remove Items</a>
+</div>
 {% endblock %}

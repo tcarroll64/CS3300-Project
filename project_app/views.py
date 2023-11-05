@@ -9,7 +9,7 @@ from typing import Any
 # Create your views here.
 def index(request):
    stores = Store.objects.all()
-   print(stores)
+   #print(stores)
    return render(request, 'project_app/index.html', {'stores':stores})
 
 # View to create new store
@@ -35,6 +35,19 @@ def deleteStore(request, store_id):
     
     context = {'store': store}
     return render(request, 'project_app/store_delete.html', context)
+
+# View to update a sheets detils (name, author, description)
+def updateStore(request, store_id):
+  store = get_object_or_404(Store, pk=store_id)
+  if request.method == 'POST':
+    form = StoreForm(request.POST, instance = store)
+    if form.is_valid():
+      form.save()
+      return redirect('store-detail', pk=store_id)
+  else:
+    form = StoreForm(instance=store)
+    context={'form': form, 'store': store}
+  return render(request, 'project_app/store_update.html', context)
 
 # View to create a new sheet
 def createSheet(request, store_id):

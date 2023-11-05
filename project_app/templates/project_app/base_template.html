@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>UCCS CS Students</title>
+    <title>WIS Scan Sheets</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     {% load bootstrap5 %}
@@ -10,23 +10,20 @@
     {% bootstrap_javascript %}
   </head>
 
-  <body>  
+  <body style="background-color: #3FEEE6; color:#1E1076">  
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg p-2 navbar-light" style="background-color:#FC4445">
       <div class="container-fluid">
-        <a href="{% url 'index' %}"><img src="{% static 'images/wis-scan-sheets-high-resolution-logo-transparent.png' %}" width="250" height="auto"></a>
+        <a href="{% url 'index' %}"><img src="{% static 'images/wis-scan-sheets-high-resolution-logo-transparent.png' %}" alt="Logo WIS Scan Sheets" width="250" height="auto"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'index' %}">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'item-list' %}">All Items</a>
-            </li>
             {% comment %} <li class="nav-item">
-              <a class="nav-link" href="#">Menu 2</a>
+              <a class="nav-link" href="{% url 'index' %}">Home</a>
             </li> {% endcomment %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'item-list' %}" style="color:#1e1076; font-size: 18px; font-weight:bold">All Items</a>
+            </li>
           </ul>
         </div>
       </div>

@@ -24,12 +24,14 @@ path('store/<int:store_id>/delete_sheet/<int:sheet_id>', views.deleteSheet, name
 path('store/<int:store_id>/add_items_to_sheet/<int:sheet_id>', views.addItemsToSheet, name='add_items_to_sheet'),
 path('create_store/', views.createStore, name='create_store'),
 path('delete_store/<int:store_id>', views.deleteStore, name='delete_store'),
+path('update_store/<int:store_id>', views.updateStore, name='update_store'),
 path('items/create_item/', views.createItem, name='create_item'),
 path('items/update_item/<int:item_id>', views.updateItem, name='update_item'),
 ]
 
 # Source: https://www.geeksforgeeks.org/python-uploading-images-in-django/
 # This looks for images in the MEDIA_ROOT (config in settings) folder whenever <image_path>.url is referenced
+# Images are stored on local machine, this is something that should be reconsidered for sprint02
 if settings.DEBUG:
         urlpatterns += static(settings.MEDIA_URL,
                               document_root=settings.MEDIA_ROOT)
