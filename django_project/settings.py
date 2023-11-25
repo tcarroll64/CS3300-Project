@@ -61,7 +61,7 @@ ROOT_URLCONF = 'django_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'project_app\\templates\\project_app')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -106,7 +106,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -141,3 +140,7 @@ MEDIA_URL = '/images/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# When a user requests that they forgot their password, instead of sending an actual email, its printed to the terminal.
+# I did this because I was getting an error that the "target machine actively refused to connect (to the SMTP)" since none was set up.
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

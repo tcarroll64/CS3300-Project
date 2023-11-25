@@ -1,10 +1,13 @@
-from .forms import StoreForm, SheetForm, ItemForm ,AddItemsToSheetForm
+from .forms import StoreForm, SheetForm, ItemForm , AddItemsToSheetForm, CreateUserForm
 from .models import Store, Sheet, Item
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
 from django.views import generic
-from typing import Any
+from django.contrib import messages
+from django.contrib.auth import login
+from django.contrib.auth.models import Group
+from django.contrib.auth.decorators import login_required
+from .decorators import allowed_users
+from .constants import VALID_PIN
 
 # Create your views here.
 def index(request):
@@ -13,6 +16,8 @@ def index(request):
    return render(request, 'project_app/index.html', {'stores':stores})
 
 # View to create new store
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['supervisor'])
 def createStore(request):
    if request.method == 'POST':
       form = StoreForm(request.POST, request.FILES) # request.FILES to handle file upload
@@ -26,6 +31,8 @@ def createStore(request):
    return render(request, 'project_app/store_form.html', context)
 
 # View to delete a store from the landing page (index)
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['supervisor'])
 def deleteStore(request, store_id):
     store = get_object_or_404(Store, pk=store_id)
 
@@ -37,6 +44,8 @@ def deleteStore(request, store_id):
     return render(request, 'project_app/store_delete.html', context)
 
 # View to update a sheets detils (name, author, description)
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['supervisor'])
 def updateStore(request, store_id):
   store = get_object_or_404(Store, pk=store_id)
   if request.method == 'POST':
@@ -50,6 +59,8 @@ def updateStore(request, store_id):
   return render(request, 'project_app/store_update.html', context)
 
 # View to create a new sheet
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['supervisor'])
 def createSheet(request, store_id):
     form = SheetForm()
     store = Store.objects.get(pk=store_id)
@@ -74,6 +85,8 @@ def createSheet(request, store_id):
     return render(request, 'project_app/sheet_form.html', context)
 
 # View to update a sheets detils (name, author, description)
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['supervisor'])
 def updateSheet(request, sheet_id, store_id):
   sheet = get_object_or_404(Sheet, pk=sheet_id)
   store = get_object_or_404(Store, pk=store_id)
@@ -88,6 +101,8 @@ def updateSheet(request, sheet_id, store_id):
   return render(request, 'project_app/sheet_update.html', context)
 
 # View to delete a sheet from store detail page
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['supervisor'])
 def deleteSheet(request, store_id, sheet_id):
     sheet = get_object_or_404(Sheet, pk=sheet_id)
     store = get_object_or_404(Store, pk=store_id)
@@ -100,18 +115,23 @@ def deleteSheet(request, store_id, sheet_id):
     return render(request, 'project_app/sheet_delete.html', context)
 
 # View to add an item to a sheet from sheet detail page
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['supervisor'])
 def addItemsToSheet(request, sheet_id, store_id):
    sheet = get_object_or_404(Sheet, pk=sheet_id)
    store = get_object_or_404(Store, pk=store_id)
+   items = Item.objects.all()
 
    if request.method == 'POST':
-      form = AddItemsToSheetForm(request.POST, instance=sheet)
+      form = AddItemsToSheetForm(request.POST, initial={'items': sheet.items.all()})
       if form.is_valid():
-         form.save()
+         selected_items = form.cleaned_data['items']
+         sheet.items.set(selected_items)
+         #form.save()
          return redirect('sheet-detail', store_id, sheet_id)
    else:
-      form = AddItemsToSheetForm(instance=sheet)
-   context={'form': form, 'sheet': sheet, 'store':store}
+      form = AddItemsToSheetForm(initial={'items': sheet.items.all()})
+   context={'form': form, 'sheet': sheet, 'store':store, 'items':items}
    return render(request, 'project_app/add_items_to_sheet.html', context)
 
 # Had to create a custom detial view because the generic view was not working
@@ -125,6 +145,8 @@ def sheet_detail(request, sheet_id, store_id):
     return render(request, 'project_app/sheet_detail.html', context)
 
 # View to create a new item
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['supervisor'])
 def createItem(request):
    if request.method == 'POST':
       form = ItemForm(request.POST, request.FILES)
@@ -137,6 +159,8 @@ def createItem(request):
    return render(request, 'project_app/item_form.html', context)
 
 # View to update an item
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['supervisor'])
 def updateItem(request, item_id):
    item = get_object_or_404(Item, pk=item_id)
    if request.method == 'POST':
@@ -154,6 +178,26 @@ def item_list(request):
    items = Item.objects.all()
    context = {'items': items}
    return render(request, 'project_app/item_list.html', context)
+
+def registerPage(request):
+   form = CreateUserForm()
+
+   if request.method == 'POST':
+      form = CreateUserForm(request.POST)
+      pin = request.POST.get('pin', '') # Get the pin entered in on the form
+
+      if pin == VALID_PIN and form.is_valid():
+         user = form.save()
+         username = form.cleaned_data.get('username')
+         group = Group.objects.get(name='supervisor')
+         user.groups.add(group)
+         login(request, user)
+         messages.success(request, 'Account was created for ' + username)
+         return redirect('index')
+      else:
+         form.add_error('pin', 'Invalid supervisor PIN. Please enter a valid PIN.')
+   context = {'form':form}
+   return render(request, 'registration/register.html', context)
 
 class StoreListView(generic.ListView):
    model = Store

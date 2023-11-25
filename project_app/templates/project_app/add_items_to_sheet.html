@@ -1,3 +1,15 @@
+<style>
+    .checkbox-container {
+        display: flex;
+        justify-content: right;
+        align-items: center;
+    }
+
+    input[type="checkbox"] {
+        transform: scale(1.75);
+    }
+</style>
+
 <!-- inherit from base.html -->
 {% extends 'project_app/base_template.html' %}
 
@@ -8,15 +20,32 @@
     <form action="" method="POST">
         <h3>Adding items to {{ sheet.name }}...</h3>
 
-{% csrf_token %}
-    <table>
-    <!-- https://docs.djangoproject.com/en/4.2/topics/forms/ -->
-        {{ form.as_p }}
-    </table>
-    <a href="{% url 'create_item' %}" class="btn btn-success" style="margin-bottom: 5px">Create New Item</a>
-    <br>
-    <a href="{% url 'sheet-detail' sheet_id=sheet.id store_id=sheet.store.id %}" class="btn btn-primary">Cancel</a>
-    <input type="submit" class="btn btn-primary" name="Add items">
+        {% csrf_token %}
+        <div class="row">
+            {% for item in items %}
+                <div class="col-md-4">
+                    <div class="card mb-4" style="background-color:#CAFAFE">
+                        <h5 class="card-title; mx-auto">{{ item.name }}</h5>
+                        <img src="{{ item.barcode.url }}" class="mx-auto" alt="{{ item.name }} barcode" width="111px" height="46px">
+                        <div class="card-body">
+                            <p class="card-text">Code: {{ item.code }}</p>
+                            <p class="card-text">{{ item.quant_bag }}/Bag</p>
+                            <p class="card-text">{{ item.quant_box }}/Box</p>
+                            <p class="card-text">Notes: {{ item.about }}</p>
+                            <div class="checkbox-container">
+                                {% comment %} Check if the item is already in the sheet and set 'checked' attribute if it is {% endcomment %}
+                                <input type="checkbox" name="items" value="{{ item.id }}" {% if item in sheet.items.all %}checked{% endif %}>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <a href="{% url 'create_item' %}" class="btn btn-success" style="margin-bottom: 5px">Create New Item</a>
+        <br>
+        <a href="{% url 'sheet-detail' sheet_id=sheet.id store_id=sheet.store.id %}" class="btn btn-primary">Cancel</a>
+        <input type="submit" class="btn btn-primary" name="Add items">
     </form>
 </div>
 {% endblock %}
