@@ -185,63 +185,47 @@ class FormsTest(TestCase):
         # print("Sheets after form submission:", Sheet.objects.all())
 
 # SELENIUM TESTS
-# class HostTest(LiveServerTestCase):
-#     def testhomepage(self):
-#         # Specifying webdriver to use (chrome webdriver)
-#         driver = webdriver.Chrome()
-#         # Navigating to local host to access Django app
-#         driver.get('http://127.0.0.1:8000/')
-#         # Adding a delay to ensure page loads correctly
-#         time.sleep(1)
-#         # Verifying the home page has the title 'WIS Scan SheetsS'
-#         assert "WIS Scan Sheets" in driver.title
+class HostTest(LiveServerTestCase):
+    def testhomepage(self):
+        # Specifying webdriver to use (chrome webdriver)
+        driver = webdriver.Chrome()
+        # Navigating to local host to access Django app
+        driver.get('http://127.0.0.1:8000/')
+        # Adding a delay to ensure page loads correctly
+        time.sleep(1)
+        # Verifying the home page has the title 'WIS Scan SheetsS'
+        assert "WIS Scan Sheets" in driver.title
 
-# class LoginFormTest(LiveServerTestCase):
-#     def testform(self):
-#         driver = webdriver.Chrome()
+class LoginFormTest(LiveServerTestCase):
+    def testform(self):
+        driver = webdriver.Chrome()
 
-#         # Navigting to log in page
-#         driver.get('http://127.0.0.1:8000/accounts/login/?next=/')
+        # Navigting to log in page
+        driver.get('http://127.0.0.1:8000/accounts/login/?next=/')
 
-#         # Finding the username/password fields on the login page
-#         user_name = driver.find_element(By.NAME, "username")
-#         user_password = driver.find_element(By.NAME, "password")
+        # Finding the username/password fields on the login page
+        user_name = driver.find_element(By.NAME, "username")
+        user_password = driver.find_element(By.NAME, "password")
 
-#         # Finding the login button on the login page
-#         submit = driver.find_element(By.CSS_SELECTOR, "input[type='submit'][value='Login']")
+        # Finding the login button on the login page
+        submit = driver.find_element(By.CSS_SELECTOR, "input[type='submit'][value='Login']")
         
-#         # Entering in login information in the username/password fields
-#         user_name.send_keys('testAdmin2')
-#         user_password.send_keys('testP@S$')
+        # Entering in login information in the username/password fields
+        user_name.send_keys('testAdmin2')
+        user_password.send_keys('testP@S$')
 
-#         # Clicking the submit button on the page after the fields have been filled out
-#         submit.click()
-#         # Added delay to see if redirect works
-#         time.sleep(2)
+        # Clicking the submit button on the page after the fields have been filled out
+        submit.click()
+        # Added delay to see if redirect works
+        time.sleep(2)
 
-#         # Ensuring that the user is logged in and their username is found on the page
-#         assert 'testAdmin' in driver.page_source
+        # Ensuring that the user is logged in and their username is found on the page
+        assert 'testAdmin' in driver.page_source
 
-#         driver.quit()
+        driver.quit()
 
 # Testing complete process of adding a pre-existing item to a sheet
 class AddItemToSheetTest(LiveServerTestCase):
-
-    # def setUp(self):
-    #     self.test_store = Store.objects.create(
-    #         name='Test Store',
-    #         store_img='store_images/Chad.png',
-    #         about='Test About Info',
-    #     )
-    #     self.sheet = Sheet.objects.create(
-    #         name='Test Sheet',
-    #         author='Test Author',
-    #         notes='Test Notes',
-    #         store=self.test_store,
-    #     )
-
-
-
     def testAddItem(self):
         def should_select_item(index):
             return index % 2 == 0
@@ -278,9 +262,9 @@ class AddItemToSheetTest(LiveServerTestCase):
         time.sleep(2)
 
         checkboxes = driver.find_elements(By.CSS_SELECTOR, "input[name='items']")
+        # Creating empty list to track the ID's of the items that were checked
         checked_item_ids = []
         
-
         time.sleep(2)
 
         for index, checkbox in enumerate(checkboxes):
@@ -293,31 +277,27 @@ class AddItemToSheetTest(LiveServerTestCase):
         submit_button = driver.find_element(By.NAME, "Add items")
         submit_button.click()
 
+        # Parsing the URL
         url_path = urlparse(driver.current_url).path
-        print("URL Path:", url_path)
+        #print("URL Path:", url_path)
+
+        # Resolving the url to a valid path in urls.py
         match = resolve(url_path)
-        print("Match:", match)
+        #print("Match:", match)
+
+        # Extracting the sheet ID from the url
         sheet_id = match.kwargs.get('sheet_id')
-        print("Sheet ID:", sheet_id)
+        #print("Sheet ID:", sheet_id)
 
-        # Debugging the Sheet retrieval
-        all_sheets = Sheet.objects.all()
-        print("All Sheets in Database:", all_sheets)
-        try:
-            sheet = Sheet.objects.get(pk=sheet_id)
-            print("Sheet:", sheet)
-            items_in_sheet = sheet.items.all()
-            print("Items in Sheet:", items_in_sheet)
-        except Sheet.DoesNotExist:
-            print("Sheet does not exist")
-
-
-        # sheet = Sheet.objects.get(pk=sheet_id)
-        # items_in_sheet = sheet.items.all()
-        # print(items_in_sheet)
-        # sheet_id = self.sheet.pk
-        # sheet = Sheet.objects.get(pk=sheet_id)
-        # items_in_sheet = sheet.items.all()
+        '''
+        PRINTS CORRECT SHEET "ID = 1" - BUT, the code below results in an error that the sheet could not be found.
+        I am not sure how to fix this. I assume it is because tests.py is not interacting with the database fully and I tried some things,
+        but none of them worked. If I have time I will revisit this before turn-in.
+        '''
+        
+        sheet = Sheet.objects.get(pk=sheet_id)
+        items_in_sheet = sheet.items.all()
+        #print(items_in_sheet)
 
         # Convert the items in the sheet to a list of item IDs
         items_in_sheet_ids = [item.id for item in items_in_sheet]
