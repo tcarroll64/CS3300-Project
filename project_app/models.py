@@ -41,7 +41,7 @@ class Sheet(models.Model):
     # if you define this method then Django will automatically
     # add a "View on Site" button to the model's record editing screens in the Admin site
     def get_absolute_url(self):
-        return reverse('sheet_detail', args=[str(self.id)])
+        return reverse('sheet-detail', args=[self.store.id, self.id])
 
 class Item(models.Model):
     # Sheet name (required)

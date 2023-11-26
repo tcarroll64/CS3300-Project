@@ -135,7 +135,7 @@ def addItemsToSheet(request, sheet_id, store_id):
    return render(request, 'project_app/add_items_to_sheet.html', context)
 
 # Had to create a custom detial view because the generic view was not working
-def sheet_detail(request, sheet_id, store_id):
+def sheet_detail(request, store_id, sheet_id):
     # Retrieve the sheet object using get_object_or_404 to handle 404 errors
     sheet = get_object_or_404(Sheet, pk=sheet_id)
     store = get_object_or_404(Store, pk=store_id)
