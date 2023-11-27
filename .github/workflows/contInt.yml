@@ -23,6 +23,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run Tests
+      - name: Run Model Unit Tests
         run: |
-          python manage.py test
+          python manage.py test project_app.tests.ModelsTest
+      
+      - name: Run Forms Unit Tests
+        run: |
+          python manage.py test project_app.tests.FormsTest
+
+      - name: Run Selenium Tests
+        run: |
+          python manage.py test project_app.tests.HostTest
+          python manage.py test project_app.tests.LoginFormTest
+          python manage.py test project_app.tests.AddItemToSheetTest
+
