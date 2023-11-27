@@ -8,14 +8,8 @@ from .forms import CreateUserForm, SheetForm
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
 from urllib.parse import urlparse
 import time
-
-options = Options()
-options.add_argument('--headless')
-options.add_argument('--disable-gpu')
-options.binary_location = 'C:\Users\Tyler\venv\cs3300\project\project\chromedriver.exe'  # Replace with the actual path to your Chrome binary
 
 # UNIT TESTS
 class ModelsTest(TestCase):
@@ -194,7 +188,7 @@ class FormsTest(TestCase):
 class HostTest(LiveServerTestCase):
     def testhomepage(self):
         # Specifying webdriver to use (chrome webdriver)
-        driver = webdriver.Chrome(options=options)
+        driver = webdriver.Chrome()
         # Navigating to local host to access Django app
         driver.get('http://127.0.0.1:8000/')
         # Adding a delay to ensure page loads correctly
@@ -204,7 +198,7 @@ class HostTest(LiveServerTestCase):
 
 class LoginFormTest(LiveServerTestCase):
     def testform(self):
-        driver = webdriver.Chrome(options=options)
+        driver = webdriver.Chrome()
 
         # Navigting to log in page
         driver.get('http://127.0.0.1:8000/accounts/login/?next=/')
@@ -236,7 +230,7 @@ class AddItemToSheetTest(LiveServerTestCase):
         def should_select_item(index):
             return index % 2 == 0
         
-        driver = webdriver.Chrome(options=options)
+        driver = webdriver.Chrome()
 
         # Go to home page
         driver.get('http://127.0.0.1:8000/')
