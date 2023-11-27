@@ -26,6 +26,7 @@ jobs:
       - name: Start Django Server
         run: |
           python manage.py runserver
+        backround: True
 
       - name: Run Model Unit Tests
         run: |
@@ -37,6 +38,7 @@ jobs:
 
       - name: Run Selenium Tests
         run: |
+          sleep 5
           python manage.py test project_app.tests.HostTest
           python manage.py test project_app.tests.LoginFormTest
           python manage.py test project_app.tests.AddItemToSheetTest
