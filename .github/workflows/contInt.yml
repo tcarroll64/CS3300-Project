@@ -31,12 +31,19 @@ jobs:
         run: |
           python manage.py test project_app.tests.FormsTest
 
+      - name: Start Django Server
+        run: |
+          python manage.py migrate
+          python manage.py runserver &
+
       - name: Run Selenium Tests
         run: |
-          python manage.py runserver
-          background: true
           sleep 5
           python manage.py test project_app.tests.HostTest
           python manage.py test project_app.tests.LoginFormTest
           python manage.py test project_app.tests.AddItemToSheetTest
+      
+      - name: Stop Django Server
+        run: |
+          pkill -f "python manage.py runserver"
 
