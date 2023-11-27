@@ -33,6 +33,7 @@
 {% endif %}
 
 <a href="{% url 'store-detail' store.id %}" class="btn btn-primary" role="button">Go Back</a>
+<a href="{% url 'generate_pdf' sheet_id=sheet.id %}" class="btn btn-primary" role="button">Generate PDF</a>
 <a href="{% url 'add_items_to_sheet' sheet_id=sheet.id store_id=store.id %}" class="btn btn-primary" role="button">Add/Remove Items</a>
 </div>
 {% endblock %}

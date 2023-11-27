@@ -8,6 +8,9 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from .decorators import allowed_users
 from .constants import VALID_PIN
+from xhtml2pdf import pisa
+from django.template.loader import get_template
+from django.http import HttpResponse
 
 # Create your views here.
 def index(request):
@@ -214,3 +217,31 @@ class SheetListView(generic.ListView):
 #    model = Item
 class ItemDetailView(generic.DetailView):
    model = Item
+
+# This view converts the template specified as 'template_path' and renders it as PDF.
+# Since the request is a get, no need to verify, no need to use it. Although view must accept the request since its a view.
+def generatePDF(request, sheet_id):
+   template_path = 'project_app/item_table.html'
+   sheet = get_object_or_404(Sheet, pk=sheet_id)
+   items = sheet.items.all()
+
+   context = {'items':items, 'sheet': sheet}
+
+   # Loading the template and rendering it
+   template = get_template(template_path)
+   html = template.render(context)
+
+   # Specifying to use the applications (browser) built-in PDF viewer
+   response = HttpResponse(content_type='application/pdf')
+
+   # Naming the PDF file
+   response['Content-Disposition'] = f'filename="items_in_sheet_{sheet_id}.pdf"'
+
+   # Using pisa to create a pdf based on the rendered template, destination of the pdf is the HTTP response (the browsers PDF viewer)
+   pisa_status = pisa.CreatePDF(html, dest=response)
+
+   # If the PDF couldnt be created give an error, else display the PDF in the browser
+   if pisa_status.err:
+      return HttpResponse('Errors in html <pre>' + html + ' </pre>')
+   else:
+      return response

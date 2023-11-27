@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Items in Sheet: {{ sheet.name }}</title>
+    <style>
+        th,td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 5px 0,
+        }
+    </style>
+</head>
+<body>
+    <h1>Items in Sheet: {{ sheet.name }}</h1>
+    <p>Author: {{ sheet.author }} </p>
+    <p>Created on: {{ sheet.pub_date }} </p>
+    <p>Notes: {{ sheet.notes }}</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Barcode</th>
+                <th>Code</th>
+                <th>Quantity/Bag</th>
+                <th>Quantity/Box</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    {% comment %} I couldnt get the image to render using {{item.barcode.url}} like I did in the past. Pisa (xhtml2pdf) likes to have the full path of the image {% endcomment %}
+                    <td><img src="media/{{ MEDIA_URL }}{{ item.barcode.name }}" class="mx-auto" alt="{{ item.name }} barcode" width="111px" height="46px" ></td>
+                    <td>{{ item.code }}</td>
+                    <td>{{ item.quant_bag }}</td>
+                    <td>{{ item.quant_box }}</td>
+                    <td>{{ item.about }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

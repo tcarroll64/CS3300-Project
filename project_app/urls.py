@@ -4,6 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
+
 urlpatterns = [
 #path function defines a url pattern
 #'' is empty to represent based path to app
@@ -28,6 +29,7 @@ path('update_store/<int:store_id>', views.updateStore, name='update_store'),
 path('items/create_item/', views.createItem, name='create_item'),
 path('items/update_item/<int:item_id>', views.updateItem, name='update_item'),
 path('accounts/register/', views.registerPage, name='register_page'),
+path('generate_pdf/sheet/<int:sheet_id>', views.generatePDF, name='generate_pdf')
 ]
 
 # Source: https://www.geeksforgeeks.org/python-uploading-images-in-django/
