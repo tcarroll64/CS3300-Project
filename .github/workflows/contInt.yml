@@ -26,7 +26,7 @@ jobs:
       - name: Start Django Server
         run: |
           python manage.py runserver
-        backround: True
+        background: True
 
       - name: Run Model Unit Tests
         run: |
